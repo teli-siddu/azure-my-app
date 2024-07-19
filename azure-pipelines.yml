@@ -1,0 +1,50 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  buildConfiguration: 'Release'
+  dotnetVersion: '6.x'
+  artifactName: 'my-app-$(Build.BuildId)' # Dynamic artifact name based on build ID
+
+steps:
+  - task: UseDotNet@2
+    inputs:
+      packageType: sdk
+      version: $(dotnetVersion)
+      installationPath: $(Agent.ToolsDirectory)/dotnet
+    
+  - script: dotnet build --configuration $(buildConfiguration)
+    displayName: 'Build Project'
+  
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: publish
+      arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+      publishWebProjects: true
+      zipAfterPublish: true
+    displayName: 'Publish Project'
+  
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      ArtifactName: $(artifactName)
+    displayName: 'publish artifacts'
+    
+   
+
+    
+    
+
+
+      
+  
+
+
