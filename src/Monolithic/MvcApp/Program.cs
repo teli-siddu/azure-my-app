@@ -15,17 +15,10 @@ builder.Configuration.AddAzureAppConfiguration(options =>
 builder.Configuration.AddAzureAppConfiguration(options =>
 {
     var url = builder.Configuration["Demo:Url"];
-    options.Connect(url)
-           .ConfigureKeyVault(kv =>
-           {
-               kv.SetCredential(new DefaultAzureCredential());
-           })
-           .ConfigureRefresh(refresh =>
-           {
-               refresh.Register("Demo:Key1", refreshAll: true)
-                      .SetCacheExpiration(TimeSpan.FromSeconds(5));
-           })
-           .UseFeatureFlags();
+    var token = new DefaultAzureCredential();
+
+    options.Connect(new Uri(url), token);
+          
 });
 builder.Logging.AddConsole();
 var app = builder.Build();
