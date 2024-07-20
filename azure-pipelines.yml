@@ -11,7 +11,7 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  dotnetVersion: '6.x'
+  dotnetVersion: '8.x'
   artifactName: 'my-app-$(Build.BuildId)' # Dynamic artifact name based on build ID
   mvcArtifactName: 'mvc-app-$(Build.BuildId)'
 
