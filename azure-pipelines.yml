@@ -25,19 +25,15 @@ steps:
     command: 'build'
     projects: '**/*.csproj'
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'test'
-    projects: '**/*.csproj'
-    arguments: '--no-restore --logger trx'
   
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'publish'
-    projects: '**/*.csproj'
-    arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)'
-
+# Publish first artifact
 - task: PublishPipelineArtifact@1
   inputs:
-    targetPath: '$(Build.ArtifactStagingDirectory)'
-    artifactName: $(artifactName)
+    targetPath: '$(Build.ArtifactStagingDirectory)/project1'
+    artifactName: 'project1'
+
+# Publish second artifact
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)/project2'
+    artifactName: 'project2'
