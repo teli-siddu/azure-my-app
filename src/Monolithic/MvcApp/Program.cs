@@ -2,6 +2,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddAzureAppConfiguration();
+builder.Configuration.AddAzureAppConfiguration(options =>
+{
+    var con = builder.Configuration.GetValue<string>("Demo:ConnectionString");
+    options.Connect(con);
+});
 
 var app = builder.Build();
 
@@ -15,7 +21,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.UseAzureAppConfiguration();
 app.UseRouting();
 
 app.UseAuthorization();
