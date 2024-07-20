@@ -29,11 +29,5 @@ steps:
 # Publish first artifact
 - task: PublishPipelineArtifact@1
   inputs:
-    targetPath: '$(Build.ArtifactStagingDirectory)/src/Monolithic/MvcApp'
+    targetPath: '$(Build.ArtifactStagingDirectory)'
     artifactName: 'MvcApp'
-
-# Publish second artifact
-- task: PublishPipelineArtifact@1
-  inputs:
-    targetPath: '$(Build.ArtifactStagingDirectory)/src/Monolithic/WebApi'
-    artifactName: 'WebApi'
