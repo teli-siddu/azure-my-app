@@ -1,3 +1,5 @@
+using Azure.Identity;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -12,18 +14,18 @@ builder.Configuration.AddAzureAppConfiguration(options =>
 // Build configuration
 builder.Configuration.AddAzureAppConfiguration(options =>
 {
-    var connectionString = builder.Configuration["Demo:ConnectionString"];
-    options.Connect(connectionString);
-           //.ConfigureKeyVault(kv =>
-           //{
-           //    kv.SetCredential(new DefaultAzureCredential());
-           //})
-           //.ConfigureRefresh(refresh =>
-           //{
-           //    refresh.Register("TestApp:Settings:Message", refreshAll: true)
-           //           .SetCacheExpiration(TimeSpan.FromSeconds(5));
-           //})
-           //.UseFeatureFlags();
+    var url = builder.Configuration["Demo:Url"];
+    options.Connect(url)
+           .ConfigureKeyVault(kv =>
+           {
+               kv.SetCredential(new DefaultAzureCredential());
+           })
+           .ConfigureRefresh(refresh =>
+           {
+               refresh.Register("Demo:Key1", refreshAll: true)
+                      .SetCacheExpiration(TimeSpan.FromSeconds(5));
+           })
+           .UseFeatureFlags();
 });
 builder.Logging.AddConsole();
 var app = builder.Build();
