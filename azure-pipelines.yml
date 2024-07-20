@@ -22,10 +22,10 @@ steps:
       version: $(dotnetVersion)
       installationPath: $(Agent.ToolsDirectory)/dotnet
     
-  - script: dotnet build src/Monolithic/WebApp/WebApp.csproj --configuration $(buildConfiguration)
+  - script: dotnet build src/Monolithic/MvcApp/MvcApp.csproj --configuration $(buildConfiguration)
     displayName: 'Build Web App'
 
-  - script: dotnet publish src/Monolithic/WebApp/WebApp.csproj --configuration Release --output $(Build.ArtifactStagingDirectory)
+  - script: dotnet publish src/Monolithic/MvcApp/MvcApp.csproj --configuration Release --output $(Build.ArtifactStagingDirectory)
     displayName: 'Publish WebApp'
   
 
