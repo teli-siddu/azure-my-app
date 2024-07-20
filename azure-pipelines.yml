@@ -12,8 +12,7 @@ pool:
 variables:
   buildConfiguration: 'Release'
   dotnetVersion: '8.x'
-  artifactName: 'my-app-$(Build.BuildId)' # Dynamic artifact name based on build ID
-  mvcArtifactName: 'mvc-app-$(Build.BuildId)'
+  artifactName: 'drop-$(Build.BuildId)' # Dynamic artifact name based on build ID
 
 steps:
   - task: UseDotNet@2
@@ -24,13 +23,16 @@ steps:
     
   - script: dotnet build src/Monolithic/MvcApp/MvcApp.csproj --configuration $(buildConfiguration)
     displayName: 'Build Web App'
-
-  - script: dotnet publish src/Monolithic/MvcApp/MvcApp.csproj --configuration Release --output $(Build.ArtifactStagingDirectory)
-    displayName: 'Publish WebApp'
   
+  - task: DotNetCoreCLI@2
+    displayName: 'Publish Web App'
+    inputs:
+      command: publish
+      publishWebProjects: true
+      arguments: 'src/Monolithic/MvcApp/MvcApp.csproj --configuration Release --output $(Build.ArtifactStagingDirectory)'
 
   - task: PublishBuildArtifacts@1
     inputs:
       PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-      ArtifactName: $(mvcArtifactName)
+      ArtifactName: $(artifactName)
     displayName: 'publish artifacts'
