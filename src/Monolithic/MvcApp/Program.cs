@@ -12,7 +12,14 @@ builder.Configuration.AddAzureAppConfiguration(options =>
     var url = builder.Configuration["Demo:Url"];
     var token = new DefaultAzureCredential();
 
-    options.Connect(new Uri(url), token);
+    options.Connect(new Uri(url), token)
+    .Select("*")
+    .ConfigureRefresh(config =>
+    {
+        config.Register("Demo:Key1",refreshAll:false)
+        .SetCacheExpiration(TimeSpan.FromSeconds(10));
+    })
+    ;
           
 });
 builder.Logging.AddConsole();
